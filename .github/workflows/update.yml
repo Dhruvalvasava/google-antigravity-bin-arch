@@ -1,0 +1,110 @@
+name: Update Google Antigravity PKGBUILD
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */4 * * *" # Run every 4 hours
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check_version.outputs.changed }}
+      version: ${{ steps.get_version.outputs.version }}
+      sha256sum: ${{ steps.get_version.outputs.sha256sum }}
+      deb_url: ${{ steps.get_version.outputs.deb_url }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl gnupg apt-transport-https coreutils
+
+      - name: Get latest version
+        id: get_version
+        run: |
+          chmod +x ./scripts/check-antigravity-version.sh
+          # Run the check script (it needs sudo for apt configuration if running on a fresh runner, but the script uses tee/etc so it might need sudo)
+          # However, check-antigravity-version.sh writes to /etc/apt/sources.list.d/, so it needs sudo.
+          # But it outputs to stdout.
+          OUTPUT=$(sudo ./scripts/check-antigravity-version.sh)
+          
+          # The script outputs: VERSION SHA256SUM URL
+          VERSION=$(echo "$OUTPUT" | cut -d' ' -f1)
+          SHA256SUM=$(echo "$OUTPUT" | cut -d' ' -f2)
+          # URL might be the 3rd argument, or we can parse it differently if spaces are involved, but usually URL has no spaces.
+          DEB_URL=$(echo "$OUTPUT" | cut -d' ' -f3)
+          
+          echo "Detected version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "sha256sum=$SHA256SUM" >> $GITHUB_OUTPUT
+          echo "deb_url=$DEB_URL" >> $GITHUB_OUTPUT
+
+      - name: Check if version changed
+        id: check_version
+        run: |
+          CURRENT_VERSION=$(grep -oP 'pkgver=\K[^"]+' package/PKGBUILD || true)
+          # If extraction fails (e.g. assumes quotes or not), try fallback
+          if [ -z "$CURRENT_VERSION" ]; then
+             CURRENT_VERSION=$(grep '^pkgver=' package/PKGBUILD | cut -d'=' -f2)
+          fi
+          
+          NEW_VERSION="${{ steps.get_version.outputs.version }}"
+          
+          echo "Current version: $CURRENT_VERSION"
+          echo "New version: $NEW_VERSION"
+          
+          if [ "$CURRENT_VERSION" != "$NEW_VERSION" ] && [ -n "$NEW_VERSION" ]; then
+            echo "Version changed!"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version unchanged or failed to detect."
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+  update-package:
+    needs: check-version
+    if: needs.check-version.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Update PKGBUILD
+        run: |
+          VERSION="${{ needs.check-version.outputs.version }}"
+          SHA256SUM="${{ needs.check-version.outputs.sha256sum }}"
+          DEB_URL="${{ needs.check-version.outputs.deb_url }}"
+          PKGBUILD_PATH="package/PKGBUILD"
+          
+          # Update pkgver
+          sed -i "s/^pkgver=.*/pkgver=$VERSION/" "$PKGBUILD_PATH"
+          
+          # Update pkgrel to 1
+          sed -i "s/^pkgrel=.*/pkgrel=1/" "$PKGBUILD_PATH"
+          
+          # Update source URL (escape slashes in URL for sed)
+          # Using different delimiter |
+          sed -i "s|source=(\"[^\"]*\"|source=(\"$DEB_URL\"|" "$PKGBUILD_PATH"
+          
+          # Update checksum
+          # Replaces the first hash found in sha256sums array
+          sed -i "/^sha256sums=('/s/'[^']*'/'$SHA256SUM'/" "$PKGBUILD_PATH"
+          
+          cat "$PKGBUILD_PATH"
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package/PKGBUILD
+          git commit -m "chore: update google-antigravity to $VERSION"
+          git push

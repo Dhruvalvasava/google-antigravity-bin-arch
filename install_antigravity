@@ -1,0 +1,64 @@
+#!/bin/bash
+set -eo pipefail
+
+# --- Configuration ---
+# Default repo URL (can be overridden by env var)
+: "${GIT_REPO_URL:=https://github.com/BOTOOM/google-antigravity-bin-arch.git}"
+: "${CLONED_REPO_DIR_NAME:=google-antigravity-bin-arch}"
+: "${PKGBUILD_SUBDIR:=package}"
+: "${ANTIGRAVITY_PKG_NAME:=google-antigravity-bin}"
+
+# --- Helper Functions ---
+log() {
+    echo "[INFO] $(date +'%T') - $1"
+}
+
+error_exit() {
+    echo "[ERROR] $(date +'%T') - $1" >&2
+    exit 1
+}
+
+check_command() {
+    command -v "$1" >/dev/null 2>&1 || error_exit "Required command '$1' not found. Please install it."
+}
+
+# --- Main Script Logic ---
+main() {
+    log "Starting Google Antigravity Installer..."
+    check_command "git"
+    check_command "makepkg"
+    check_command "pacman"
+
+    # Create temp dir
+    TEMP_DIR=$(mktemp -d --suffix=-antigravity-install)
+    log "Created temporary directory: $TEMP_DIR"
+
+    cleanup() {
+        rm -rf "$TEMP_DIR"
+        log "Cleanup finished."
+    }
+    trap cleanup EXIT
+
+    # Clone repo
+    log "Cloning repository..."
+    if ! git clone --depth 1 "$GIT_REPO_URL" "$TEMP_DIR/$CLONED_REPO_DIR_NAME"; then
+        error_exit "Failed to clone repository."
+    fi
+
+    BUILD_DIR="$TEMP_DIR/$CLONED_REPO_DIR_NAME/$PKGBUILD_SUBDIR"
+    if [ ! -d "$BUILD_DIR" ]; then
+        error_exit "Build directory not found: $BUILD_DIR"
+    fi
+
+    cd "$BUILD_DIR"
+    
+    log "Building and installing package..."
+    # Using --noconfirm for automated install, remove if interaction desired
+    if ! makepkg -si --noconfirm --needed; then
+        error_exit "Installation failed."
+    fi
+
+    log "Installation successful!"
+}
+
+main
