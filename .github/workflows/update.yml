@@ -101,10 +101,28 @@ jobs:
           
           cat "$PKGBUILD_PATH"
 
-      - name: Commit and Push
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update google-antigravity to ${{ needs.check-version.outputs.version }}"
+          title: "Update google-antigravity to ${{ needs.check-version.outputs.version }}"
+          body: |
+            This PR updates the google-antigravity package to version ${{ needs.check-version.outputs.version }}.
+            
+            This is an automated PR created by the version check workflow.
+          branch: "update-antigravity-${{ needs.check-version.outputs.version }}"
+          base: "main"
+          labels: "automated pr"
+          delete-branch: true
+
+      - name: Merge Pull Request
+        if: ${{ steps.cpr.outputs.pull-request-operation == 'created' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package/PKGBUILD
-          git commit -m "chore: update google-antigravity to $VERSION"
-          git push
+          echo "Attempting to merge PR #${PR_NUMBER}"
+          gh pr merge "$PR_NUMBER" --merge --delete-branch --repo "${{ github.repository }}"
+          echo "PR #${PR_NUMBER} merged."
